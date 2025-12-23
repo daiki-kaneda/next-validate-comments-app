@@ -1,65 +1,49 @@
-import Image from "next/image";
+
+import { CommentForm } from "@/src/components/CommentForm";
+import { CommentList } from "@/src/components/CommentList";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    // 背景色を薄いグレー(bg-slate-50)にして、カード(白)を浮かび上がらせる
+    <main className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* ヘッダー部分 */}
+        <header className="mb-12 text-center">
+          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+            Feedback Hub
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+          <p className="text-slate-500">皆様からの貴重なコメントをお待ちしております</p>
+        </header>
+
+        {/* グリッドレイアウト: PCでは2カラム、スマホでは1カラム */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* 左側：投稿フォーム (12列中 5列分を使用) */}
+          <section className="lg:col-span-5 lg:sticky lg:top-8">
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 px-1">
+              New Comment
+            </h2>
+            <CommentForm />
+          </section>
+
+          {/* 右側：コメント一覧 (12列中 7列分を使用) */}
+          <section className="lg:col-span-7">
+            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 px-1">
+              Recent Activity
+            </h2>
+            {/* データ取得中に「読み込み中...」を出すための Suspense 
+              将来的にスケルトン画面（骨組み）を入れるとよりプロっぽくなります
+            */}
+            <Suspense fallback={
+              <div className="p-12 text-center text-slate-400">読み込み中...</div>
+            }>
+              <CommentList />
+            </Suspense>
+          </section>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
